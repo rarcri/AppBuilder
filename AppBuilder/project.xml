@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+	
+	<meta title="AppBuilder" package="com.sample.appbuilder" version="1.0.0" company="Company Name" />
+	<app main="Main" path="Export" file="AppBuilder" />
+	
+	<icon path="logo.png" />
+
+	<source path="Source" />
+	
+	<haxelib name="openfl" />
+	<haxelib name="feathersui" />
+	
+	<assets path="Assets" rename="assets" />
+	
+</project>
