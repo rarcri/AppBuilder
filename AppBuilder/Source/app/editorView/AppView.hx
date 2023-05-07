@@ -19,11 +19,12 @@ class AppView {
     return appView;
   }
 
-  public function refresh(core){
+  public function refresh(core:Core){
 
     // Set Dimensions
     width = 0.58 * core.stage.stageWidth;
     height = 9/16 * width; 
+    
 
     var x = 0; 
     var y = 0; 

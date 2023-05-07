@@ -30,7 +30,7 @@ class Button {
     var textInput:TextInput;
     var btn:feathers.controls.Button;
     // AppButton
-    var appButtonArray:Array<AppButton>;
+    public var appButtonArray:Array<AppButton>;
 
 
     public function new(core:Core){
@@ -143,43 +143,68 @@ class Button {
         // Cand dam click pe MouseEvent 
         overlayButton.addEventListener(MouseEvent.MOUSE_UP,(e)->{
             trace(overlayButton.x+ " "+ overlayButton.y);
+            if(overlayButton.x>0.2 * core.stage.stageWidth &&
+               overlayButton.y>0.1 * core.stage.stageHeight &&
+               overlayButton.x<0.8 * core.stage.stageWidth){
+                // new AppButton
+                var appButton = new app.editorView.appView.AppButton(core);
+                appButtonArray.push(appButton);
+                appButtonAux = appButton;
 
-            // new AppButton
-            var appButton = new app.editorView.appView.AppButton(core);
-            appButtonArray.push(appButton);
-            appButtonAux = appButton;
+                
+                appButton.getAppButton().width = overlayButton.width;
+                appButton.getAppButton().height = overlayButton.height;
+
+                appButton.getAppButton().x = overlayButton.x - core.editorView.appView.getAppView().x;
+                appButton.getAppButton().y = overlayButton.y - core.editorView.appView.getAppView().y;
+
+
+
+                appButton.setPercents(core);
+
+                core.editorView.appView.getAppView().addChild(appButton.getAppButton());
 
             
-            appButton.getAppButton().width = overlayButton.width;
-            appButton.getAppButton().height = overlayButton.height;
 
-            appButton.getAppButton().x = overlayButton.x - core.editorView.appView.getAppView().x;
-            appButton.getAppButton().y = overlayButton.y - core.editorView.appView.getAppView().y;
+                // Stop Drag
+                overlayButton.stopDrag();
+
+                // Remove Overlay
+                core.editorView.getEditorView().removeChild(overlayButton);
+
+                // Here we add the PopUp
+                PopUpManager.addPopUp(panel, core.stage, true, true);
 
 
+            } else {
 
-            appButton.setPercents(core);
+                // Stop Drag
+                overlayButton.stopDrag();
 
-            core.editorView.appView.getAppView().addChild(appButton.getAppButton());
+                // Remove Overlay
+                core.editorView.getEditorView().removeChild(overlayButton);
 
-        
-
-            // Stop Drag
-            overlayButton.stopDrag();
-
-            // Remove Overlay
-            core.editorView.getEditorView().removeChild(overlayButton);
-
-            // Here we add the PopUp
-            PopUpManager.addPopUp(panel, core.stage, true, true);
-
+            }
         });
 
         // Add Event Listener to popup
         btn.addEventListener(TriggerEvent.TRIGGER,(e)->{
 
+            // ScreenName
+            var screenIndex = core.editorView.panel.toggleGroup.selectedIndex;
+            var screenName = core.editorView.panel.screens[screenIndex].text.text;
+
+            var uppercaseScreenName = "";
+            var lowercaseScreenName = "";
+            
+            uppercaseScreenName = screenName.substring(0,1).toUpperCase() + screenName.substring(1);
+            lowercaseScreenName = screenName.substring(0,1).toLowerCase() + screenName.substring(1);
+
+
             // Name of the component
             var componentName = textInput.text;
+
+
             // upper and lowercase Name for Component
             var uppercaseComponentName = componentName.substring(0,1).toUpperCase() + componentName.substring(1);
             var lowercaseComponentName = componentName.substring(0,1).toLowerCase() + componentName.substring(1);
@@ -190,48 +215,48 @@ class Button {
 
 
             // Create file Button for project
-            File.saveContent(core.addProject.okButton.path + "/Source/app/screen1/"+uppercaseComponentName+".hx", appButtonAux.code.getCode(core));
+            File.saveContent(core.addProject.okButton.path + "/Source/app/"+lowercaseScreenName+"/"+uppercaseComponentName+".hx", appButtonAux.code.getCode(core));
 
             // Change Core
-            var corePath = core.addProject.okButton.path+"/Source/Core.hx";
+            var screenPath = core.addProject.okButton.path+"/Source/app/"+uppercaseScreenName+".hx";
 
-            var coreCode = File.getContent(corePath);
+            var screenCode = File.getContent(screenPath);
 
             //  Imports
             var regex = ~/(?<=import openfl.display.Sprite;)\n/mg;
 
-            coreCode = regex.replace(coreCode,"
-import app.screen1."+uppercaseComponentName+";
+            screenCode = regex.replace(screenCode,"
+import app."+lowercaseScreenName+"."+uppercaseComponentName+";
 ");
 
             // Define 
             regex = ~/(?<=var Children)\n/mg;
 
-            coreCode = regex.replace(coreCode,"
+            screenCode = regex.replace(screenCode,"
     var "+lowercaseComponentName+":"+uppercaseComponentName+";
 ");
 
             // create Children
             regex = ~/(?<=create Children)\n/mg;
 
-            coreCode = regex.replace(coreCode,"
-        "+lowercaseComponentName+" = new "+uppercaseComponentName+"(this);
+            screenCode = regex.replace(screenCode,"
+        "+lowercaseComponentName+" = new "+uppercaseComponentName+"(core);
 ");
 
             // add Children
             regex = ~/(?<=add Children)\n/mg;
 
-            coreCode = regex.replace(coreCode,"
-        core.addChild("+lowercaseComponentName+".get"+uppercaseComponentName+"());
+            screenCode = regex.replace(screenCode,"
+        "+lowercaseScreenName+".addChild("+lowercaseComponentName+".get"+uppercaseComponentName+"());
 ");
 
             regex = ~/(?<=refreshButton)\n/mg;
 
-            coreCode = regex.replace(coreCode,"
-        "+lowercaseComponentName+".refresh(this);
+            screenCode = regex.replace(screenCode,"
+        "+lowercaseComponentName+".refresh(core);
 ");
 
-            File.saveContent(corePath,coreCode);
+            File.saveContent(screenPath,screenCode);
 
                 // Remove popup
                 PopUpManager.removePopUp(panel);

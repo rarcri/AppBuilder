@@ -80,11 +80,11 @@ class AppButton {
 
 
         // Set Button textFormat
-        if(core.stage.stageWidth < core.stage.stageHeight){
-		    appButton.textFormat = new TextFormat("Arial", Std.int(0.03 * core.stage.stageWidth));
-        } else {
-		    appButton.textFormat = new TextFormat("Arial", Std.int(0.03 * core.stage.stageHeight));
-        }
+        // if(core.stage.stageWidth < core.stage.stageHeight){
+		//     appButton.textFormat = new TextFormat("Arial", Std.int(0.03 * core.stage.stageWidth));
+        // } else {
+		//     appButton.textFormat = new TextFormat("Arial", Std.int(0.03 * core.stage.stageHeight));
+        // }
     }
 
 }

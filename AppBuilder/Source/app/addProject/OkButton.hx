@@ -54,11 +54,86 @@ class OkButton {
             if(sys.FileSystem.exists(path)){
                 trace("Project exists");
 
-                // var coreContent = File.getContent(path+"/Source/Core");
-                // var regex = ~/app.*$/gm;
+                // We read the number of screens
+                var sourceDirectory = sys.FileSystem.readDirectory(path+"/Source/app");
+                var numberOfScreens = 0;
+                var folders = [];
+                for(file in sourceDirectory){
+                    var regex = ~/^[a-z]/;
+                    if(regex.match(file)==true){
+                        numberOfScreens++;
+                        folders.push(file);
+                    }
+                }
 
-                // var matches = regex.match(coreContent);
+                trace("Number of screens: "+numberOfScreens);
 
+                // We add the unexistent Screens
+                if(numberOfScreens != 1){
+                    for(i in 2...numberOfScreens+1){
+                        core.editorView.panel.addScreen("Screen"+i,core);
+                    }
+
+                    core.editorView.panel.addScreenButton.i = numberOfScreens+1;
+                }
+                function searchFor(a:String,b:String){
+
+                    var regex = new EReg("^.*\\."+a+".*","gm");
+                    regex.match(b);
+                    var matched = regex.matched(0);
+
+                    var regex1 = ~/0\.\d{1,20}/gm;
+                    regex1.match(matched);
+                    trace(a+" "+regex1.matched(0));
+                    
+                    return regex1.matched(0);
+                }
+
+                // We search in every Folder for elements
+                for(folder in folders){
+                    var components = sys.FileSystem.readDirectory(path+"/Source/app/"+folder); 
+                    for(component in components){
+                        var componentContent = File.getContent(path+"/Source/app/"+folder+"/"+component);
+
+                        // Screen Index
+                        var reg = ~/\d/mg;
+                        reg.match(folder);
+                        var screenIndex = Std.parseInt(reg.matched(0));
+
+                        // ComponentType
+                        var reg1 = ~/(?<=controls.)[A-z]*/mg;
+                        reg1.match(componentContent);
+                        var componentType = reg1.matched(0);
+                        
+                        var componentWidth = Std.parseFloat(searchFor("width",componentContent));
+                        var componentHeight = Std.parseFloat(searchFor("height",componentContent));
+                        var componentX = Std.parseFloat(searchFor("x",componentContent));
+                        var componentY = Std.parseFloat(searchFor("y",componentContent));
+
+                        if(componentType == "Button"){
+
+                            reg = ~/(?<=new Button\(')[A-z]{0,50}/gm;
+                            reg.match(componentContent);
+                            var buttonText = reg.matched(0);
+
+                            // New Button
+                            var button = new Button(buttonText);
+                            // Size
+                            button.width = componentWidth * core.editorView.appView.width ;
+                            button.height = componentHeight* core.editorView.appView.height ;
+
+                            // Position
+                            button.x = componentX * core.editorView.appView.width;
+                            button.y = componentY * core.editorView.appView.height;
+
+                            core.editorView.panel.screens[screenIndex-1].elements.addChild(button);
+                            
+                        }
+
+                    }
+                }
+
+                core.editorView.appView.getAppView().addChild(core.editorView.panel.screens[0].elements);
 
             } else {
 
@@ -76,52 +151,51 @@ class OkButton {
 
                 // We create the screen1
                 Sys.command("cd "+source + "/app && mkdir screen1");
+                
+                var screenName = "Screen1";
+                var uppercaseScreenName = "";
+                var lowercaseScreenName = "";
+                
+                uppercaseScreenName = screenName.substring(0,1).toUpperCase() + screenName.substring(1);
+                lowercaseScreenName = screenName.substring(0,1).toLowerCase() + screenName.substring(1);
+
 
                 // Content for screen1
-                var content = "package app;
-
+                var screenContent = "package app;
+import openfl.display.Stage;
 import openfl.display.Sprite;
-// Children
-import app.addProject.ProjectName;
-import app.addProject.OkButton;
-import app.addProject.Title;
 
-class AddProject {
-    
-    var addProject:Sprite;
-    
-    // Children
+class "+uppercaseScreenName+" {
+    var "+lowercaseScreenName+":Sprite;
+    // var Children
 
     public function new(core:Core){
-        addProject = new Sprite();
 
-        // Children
-        projectName = new ProjectName(core);
-        okButton = new OkButton(core);
-        title = new Title(core);
-        
-        addProject.addChild(projectName.getProjectName());
-        addProject.addChild(okButton.getOkButton());
-        addProject.addChild(title.getTitle());
+        "+lowercaseScreenName+" = new Sprite();
+
+        // create Children
+
+        // add Children
+
 
         refresh(core);
     }
 
-    public function getAddProject(){
-        return addProject;
+    public function get"+uppercaseScreenName+"(){
+        return "+lowercaseScreenName+";
     }
 
     public function refresh(core:Core){
-       projectName.refresh(core); 
-       okButton.refresh(core);
-       title.refresh(core);
+        // refreshButton
+
     }
-}
-                ";
+
+}";
+
+            // Save the Screen1 content 
+            File.saveContent(source +"/app/Screen1.hx",screenContent);
 
 
-                // Save the content 
-                // File.saveContent();
                 
             // xml file 
             var xml= Path.join([path, "project.xml"]).toString();
@@ -216,6 +290,53 @@ import openfl.events.Event;");
             // Save content
 
                 File.saveContent(mainPath, mainContent);
+
+
+            // Change Core for Screen1
+            var corePath = source+"/Core.hx";
+            var coreCode = File.getContent(corePath);
+            var screenName = "Screen1";
+            var uppercaseScreenName = "";
+            var lowercaseScreenName = "";
+            
+            uppercaseScreenName = screenName.substring(0,1).toUpperCase() + screenName.substring(1);
+            lowercaseScreenName = screenName.substring(0,1).toLowerCase() + screenName.substring(1);
+
+            //  Imports
+            var regex = ~/(?<=import openfl.display.Sprite;)\n/mg;
+
+            coreCode = regex.replace(coreCode,"
+import app."+uppercaseScreenName+";
+");
+
+            // Define 
+            regex = ~/(?<=var Children)\n/mg;
+
+            coreCode = regex.replace(coreCode,"
+    var "+lowercaseScreenName+":"+uppercaseScreenName+";
+");
+
+            // create Children
+            regex = ~/(?<=create Children)\n/mg;
+
+            coreCode = regex.replace(coreCode,"
+        "+lowercaseScreenName+" = new "+uppercaseScreenName+"(this);
+");
+
+            // add Children
+            regex = ~/(?<=add Children)\n/mg;
+
+            coreCode = regex.replace(coreCode,"
+        core.addChild("+lowercaseScreenName+".get"+uppercaseScreenName+"());
+");
+
+            regex = ~/(?<=refreshButton)\n/mg;
+
+            coreCode = regex.replace(coreCode,"
+        "+lowercaseScreenName+".refresh(this);
+");
+
+            File.saveContent(corePath,coreCode);
                 
             }
             

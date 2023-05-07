@@ -14,6 +14,7 @@ import sys.io.File;
 
 class AddScreenButton {
 	var addScreenButton:Button;
+	public var i:Int;
 
 	public function new(core:Core){
 		addScreenButton = new Button("+ Adauga");
@@ -36,7 +37,7 @@ class AddScreenButton {
 	}
 
 	public function events(core:Core){
-		var i=2;
+		i=2;
 		addScreenButton.addEventListener(TriggerEvent.TRIGGER, (e)->{
 			core.editorView.panel.addScreen("Screen"+i,core);
 			i++;

@@ -25,6 +25,10 @@ class Code{
     // Name
     public var uppercaseName:String;
     public var lowercaseName:String;
+
+    //Screen Name
+    public var uppercaseScreenName:String;
+    public var lowercaseScreenName:String;
     
     public function new(){
     }
@@ -34,7 +38,7 @@ class Code{
         lowercaseName = name.substring(0,1).toLowerCase() + name.substring(1);
 
         // Create file Button for project
-        File.saveContent(core.addProject.okButton.path + "/Source/app/"+uppercaseName+".hx", getCode(core));
+        File.saveContent(core.addProject.okButton.path + "/Source/app/"+lowercaseScreenName+"/"+uppercaseName+".hx", getCode(core));
 
         trace("Code saved and Component name is: " + uppercaseName + " and the width is " + width);
     }
@@ -52,8 +56,17 @@ class Code{
         yPercent=y/core.editorView.appView.getAppView().height;
         trace(widthPercent);
 
+        // ScreenIndex
+        var screenIndex = core.editorView.panel.toggleGroup.selectedIndex;
+        var screenName = core.editorView.panel.screens[screenIndex].text.text;
 
-        return "package app.screen1;
+        uppercaseScreenName = "";
+        lowercaseScreenName = "";
+        
+        uppercaseScreenName = screenName.substring(0,1).toUpperCase() + screenName.substring(1);
+        lowercaseScreenName = screenName.substring(0,1).toLowerCase() + screenName.substring(1);
+
+        return "package app."+lowercaseScreenName+";
 
 import feathers.controls.Button;
 
