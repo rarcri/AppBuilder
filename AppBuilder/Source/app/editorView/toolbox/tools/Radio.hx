@@ -1,6 +1,6 @@
 package app.editorView.toolbox.tools;
 
-import app.editorView.appView.AppButton;
+import app.editorView.appView.AppRadio;
 import openfl.geom.Point;
 import openfl.events.Event;
 import openfl.events.MouseEvent;
@@ -8,6 +8,7 @@ import feathers.events.TriggerEvent;
 import openfl.events.KeyboardEvent;
 import openfl.events.FocusEvent;
 import feathers.controls.Button;
+import feathers.controls.Radio;
 import feathers.controls.Panel;
 import feathers.controls.Header;
 import feathers.controls.Label;
@@ -18,27 +19,27 @@ import openfl.text.TextFormat;
 import sys.io.File;
 #end
 
-class Button {
+class Radio{
 
-    var button:feathers.controls.Button;
+    var radio:feathers.controls.Radio;
     // Overlay
-    var overlayButton:feathers.controls.Button;
+    var overlayRadio:feathers.controls.Radio;
     // Button Aux
-    public var appButtonAux:AppButton;
+    public var appRadioAux:AppRadio;
     //PopUp
     var panel:Panel;
     var label:Label;
     var textInput:TextInput;
     var btn:feathers.controls.Button;
     // AppButton
-    public var appButtonArray:Array<AppButton>;
+    public var appRadioArray:Array<AppRadio>;
 
 
     public function new(core:Core){
-        button = new feathers.controls.Button("Button");
+        radio = new feathers.controls.Radio("Radio");
 
-        // OverlayButton
-        overlayButton = new feathers.controls.Button("Button");
+        // OverlayRadio
+        overlayRadio = new feathers.controls.Radio("Radio");
 
         // Popup
         panel = new Panel();
@@ -54,8 +55,8 @@ class Button {
         btn = new feathers.controls.Button("OK");
         panel.addChild(btn);
 
-        // AppButtonArray
-        appButtonArray = new Array();
+        // AppRadioArray
+        appRadioArray = new Array();
         
 
         refresh(core);
@@ -63,8 +64,8 @@ class Button {
     }
 
 
-    public function getButton(){
-        return button;
+    public function getRadio(){
+        return radio;
     }
 
 
@@ -73,28 +74,28 @@ class Button {
 
         
 
-        button.width = 0.1 * core.stage.stageWidth;
-        button.height = 0.05 * core.stage.stageHeight;
+        radio.width = 0.1 * core.stage.stageWidth;
+        radio.height = 0.05 * core.stage.stageHeight;
 
-        button.x = 0.2 * core.stage.stageWidth/2 - button.width/2;
-        button.y = 0.13 * core.stage.stageHeight;
+        radio.x = 0.2 * core.stage.stageWidth/2 - radio.width/2;
+        radio.y = 0.70 * core.stage.stageHeight;
 
-        // Set Button textFormat
+        // Set radio textFormat
         if(core.stage.stageWidth < core.stage.stageHeight){
-		    button.textFormat = new TextFormat("Arial", Std.int(0.03 * core.stage.stageWidth));
+		    radio.textFormat = new TextFormat("Arial", Std.int(0.03 * core.stage.stageWidth));
         } else {
-		    button.textFormat = new TextFormat("Arial", Std.int(0.03 * core.stage.stageHeight));
+		    radio.textFormat = new TextFormat("Arial", Std.int(0.03 * core.stage.stageHeight));
         }
         
-        // OverlayButton
-        overlayButton.width = button.width;
-        overlayButton.height = button.height;
+        // Overlayradio
+        overlayRadio.width = radio.width;
+        overlayRadio.height = radio.height;
 
 
         // Children
-        if(appButtonArray.length != 0){
-            for(appButtonI in appButtonArray){
-                appButtonI.refresh(core);
+        if(appRadioArray.length != 0){
+            for(appRadioI in appRadioArray){
+                appRadioI.refresh(core);
             }
         }
 
@@ -126,54 +127,54 @@ class Button {
     public function events(core:Core){
 
 
-        button.addEventListener(MouseEvent.MOUSE_DOWN,(e)->{
+        radio.addEventListener(MouseEvent.MOUSE_DOWN,(e)->{
 
 
             // Set Position
-            overlayButton.x = 0.2*core.stage.stageWidth/2 - overlayButton.width/2 + 0.8 * core.stage.stageWidth;
-            overlayButton.y = 0.23 * core.stage.stageHeight;
+            overlayRadio.x = 0.2*core.stage.stageWidth/2 - overlayRadio.width/2 + 0.8 * core.stage.stageWidth;
+            overlayRadio.y = 0.80 * core.stage.stageHeight;
 
             // Add overlay 
-            core.editorView.getEditorView().addChild(overlayButton);
+            core.editorView.getEditorView().addChild(overlayRadio);
             // Start drag
-            overlayButton.startDrag();
+            overlayRadio.startDrag();
 
         });
 
 
         // Cand dam click pe MouseEvent 
-        overlayButton.addEventListener(MouseEvent.MOUSE_UP,(e)->{
-            trace(overlayButton.x+ " "+ overlayButton.y);
-            if(overlayButton.x>0.2 * core.stage.stageWidth &&
-               overlayButton.y>0.1 * core.stage.stageHeight &&
-               overlayButton.x<0.8 * core.stage.stageWidth){
+        overlayRadio.addEventListener(MouseEvent.MOUSE_UP,(e)->{
+            trace(overlayRadio.x+ " "+ overlayRadio.y);
+            if(overlayRadio.x>0.2 * core.stage.stageWidth &&
+               overlayRadio.y>0.1 * core.stage.stageHeight &&
+               overlayRadio.x<0.8 * core.stage.stageWidth){
 
 
-                // new AppButton
-                var appButton = new app.editorView.appView.AppButton(core);
-                appButtonArray.push(appButton);
-                appButtonAux = appButton;
+                // new AppRadio
+                var appRadio = new app.editorView.appView.AppRadio(core);
+                appRadioArray.push(appRadio);
+                appRadioAux = appRadio;
 
                 
-                appButton.getAppButton().width = overlayButton.width;
-                appButton.getAppButton().height = overlayButton.height;
+                appRadio.getAppRadio().width = overlayRadio.width;
+                appRadio.getAppRadio().height = overlayRadio.height;
 
-                appButton.getAppButton().x = overlayButton.x - core.editorView.appView.getAppView().x;
-                appButton.getAppButton().y = overlayButton.y - core.editorView.appView.getAppView().y;
+                appRadio.getAppRadio().x = overlayRadio.x - core.editorView.appView.getAppView().x;
+                appRadio.getAppRadio().y = overlayRadio.y - core.editorView.appView.getAppView().y;
 
 
 
-                appButton.setPercents(core);
+                appRadio.setPercents(core);
 
-                core.editorView.appView.getAppView().addChild(appButton.getAppButton());
+                core.editorView.appView.getAppView().addChild(appRadio.getAppRadio());
 
             
 
                 // Stop Drag
-                overlayButton.stopDrag();
+                overlayRadio.stopDrag();
 
                 // Remove Overlay
-                core.editorView.getEditorView().removeChild(overlayButton);
+                core.editorView.getEditorView().removeChild(overlayRadio);
 
 
                 // Here we add the PopUp
@@ -183,10 +184,10 @@ class Button {
             } else {
 
                 // Stop Drag
-                overlayButton.stopDrag();
+                overlayRadio.stopDrag();
 
                 // Remove Overlay
-                core.editorView.getEditorView().removeChild(overlayButton);
+                core.editorView.getEditorView().removeChild(overlayRadio);
 
             }
         });
@@ -213,13 +214,13 @@ class Button {
             var uppercaseComponentName = componentName.substring(0,1).toUpperCase() + componentName.substring(1);
             var lowercaseComponentName = componentName.substring(0,1).toLowerCase() + componentName.substring(1);
 
-            appButtonAux.code.name = componentName;
-            appButtonAux.code.text = "Button";
+            appRadioAux.code.name = componentName;
+            appRadioAux.code.text = "Radio";
 
 
 
-            // Create file Button for project
-            File.saveContent(core.addProject.okButton.path + "/Source/app/"+lowercaseScreenName+"/"+uppercaseComponentName+".hx", appButtonAux.code.getCode(core));
+            // Create file Radio for project
+            File.saveContent(core.addProject.okButton.path + "/Source/app/"+lowercaseScreenName+"/"+uppercaseComponentName+".hx", appRadioAux.code.getCode(core));
 
             // Refresh radioButton();
             var index = core.editorView.panel.toggleGroup.selectedIndex;

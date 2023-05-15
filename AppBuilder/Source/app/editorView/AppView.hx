@@ -32,7 +32,7 @@ class AppView {
     // Clear 
     appView.graphics.clear();
     // Begin Fill
-    appView.graphics.beginFill(0x444444);
+    appView.graphics.beginFill(0xA0A0A0);
 
 
     // Draw Round Rect

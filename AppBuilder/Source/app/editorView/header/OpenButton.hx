@@ -6,48 +6,48 @@ import app.editorView.appView.appButton.Code;
 import feathers.text.TextFormat;
 import openfl.events.MouseEvent;
 
-class NewButton{
-    var newButton:Label;
+class OpenButton{
+    var openButton:Label;
 
 
     public function new(core:Core){
-        newButton = new Label("New");
+        openButton = new Label("Open");
 
         refresh(core);
         events(core);
     }
 
-    public function getNewButton(){
-        return newButton;
+    public function getOpenButton(){
+        return openButton;
     }
 
     public function refresh(core:Core){
 
             // Size
-            newButton.width = 0.3 * core.stage.stageWidth;
-            newButton.height = 0.05* core.stage.stageHeight; 
-            trace("appButton.width: "+newButton.width);
+            openButton.width = 0.3 * core.stage.stageWidth;
+            openButton.height = 0.05* core.stage.stageHeight; 
+            trace("appButton.width: "+openButton.width);
 
             // Position
-            newButton.x = 0.2 * core.stage.stageWidth;
-            newButton.y = 0.05 * core.stage.stageHeight;
+            openButton.x = 0.1 * core.stage.stageWidth;
+            openButton.y = 0.05 * core.stage.stageHeight;
 
 
 
         // Set Button textFormat
         if(core.stage.stageWidth < core.stage.stageHeight){
-		    newButton.textFormat = new TextFormat("Arial", Std.int(0.03 * core.stage.stageWidth),0xffffff);
+		    openButton.textFormat = new TextFormat("Arial", Std.int(0.03 * core.stage.stageWidth),0xffffff);
         } else {
-		    newButton.textFormat = new TextFormat("Arial", Std.int(0.03 * core.stage.stageHeight),0xffffff);
+		    openButton.textFormat = new TextFormat("Arial", Std.int(0.03 * core.stage.stageHeight),0xffffff);
         }
     }
 
     public function events(core:Core){
-       newButton.addEventListener(MouseEvent.CLICK,(e)->{
+       openButton.addEventListener(MouseEvent.CLICK,(e)->{
         
             core.getCore().removeChildren();
+            core.addProject.okButton.getOkButton().text = "Open";
             core.getCore().addChild(core.addProject.getAddProject());
-            core.addProject.okButton.getOkButton().text = "New";
 
             // reset AppView
             core.editorView.appView.getAppView().removeChildren();

@@ -1,6 +1,6 @@
 package app.editorView.toolbox.tools;
 
-import app.editorView.appView.AppButton;
+import app.editorView.appView.AppCheck;
 import openfl.geom.Point;
 import openfl.events.Event;
 import openfl.events.MouseEvent;
@@ -8,6 +8,7 @@ import feathers.events.TriggerEvent;
 import openfl.events.KeyboardEvent;
 import openfl.events.FocusEvent;
 import feathers.controls.Button;
+import feathers.controls.Check;
 import feathers.controls.Panel;
 import feathers.controls.Header;
 import feathers.controls.Label;
@@ -18,27 +19,27 @@ import openfl.text.TextFormat;
 import sys.io.File;
 #end
 
-class Button {
+class Check{
 
-    var button:feathers.controls.Button;
+    var check:feathers.controls.Check;
     // Overlay
-    var overlayButton:feathers.controls.Button;
+    var overlayCheck:feathers.controls.Check;
     // Button Aux
-    public var appButtonAux:AppButton;
+    public var appCheckAux:AppCheck;
     //PopUp
     var panel:Panel;
     var label:Label;
     var textInput:TextInput;
     var btn:feathers.controls.Button;
     // AppButton
-    public var appButtonArray:Array<AppButton>;
+    public var appCheckArray:Array<AppCheck>;
 
 
     public function new(core:Core){
-        button = new feathers.controls.Button("Button");
+        check = new feathers.controls.Check("Check");
 
-        // OverlayButton
-        overlayButton = new feathers.controls.Button("Button");
+        // OverlayCheck
+        overlayCheck = new feathers.controls.Check("Check");
 
         // Popup
         panel = new Panel();
@@ -54,8 +55,8 @@ class Button {
         btn = new feathers.controls.Button("OK");
         panel.addChild(btn);
 
-        // AppButtonArray
-        appButtonArray = new Array();
+        // AppCheckArray
+        appCheckArray = new Array();
         
 
         refresh(core);
@@ -63,8 +64,8 @@ class Button {
     }
 
 
-    public function getButton(){
-        return button;
+    public function getCheck(){
+        return check;
     }
 
 
@@ -73,28 +74,28 @@ class Button {
 
         
 
-        button.width = 0.1 * core.stage.stageWidth;
-        button.height = 0.05 * core.stage.stageHeight;
+        check.width = 0.1 * core.stage.stageWidth;
+        check.height = 0.05 * core.stage.stageHeight;
 
-        button.x = 0.2 * core.stage.stageWidth/2 - button.width/2;
-        button.y = 0.13 * core.stage.stageHeight;
+        check.x = 0.2 * core.stage.stageWidth/2 - check.width/2;
+        check.y = 0.43 * core.stage.stageHeight;
 
-        // Set Button textFormat
+        // Set check textFormat
         if(core.stage.stageWidth < core.stage.stageHeight){
-		    button.textFormat = new TextFormat("Arial", Std.int(0.03 * core.stage.stageWidth));
+		    check.textFormat = new TextFormat("Arial", Std.int(0.03 * core.stage.stageWidth));
         } else {
-		    button.textFormat = new TextFormat("Arial", Std.int(0.03 * core.stage.stageHeight));
+		    check.textFormat = new TextFormat("Arial", Std.int(0.03 * core.stage.stageHeight));
         }
         
-        // OverlayButton
-        overlayButton.width = button.width;
-        overlayButton.height = button.height;
+        // Overlaycheck
+        overlayCheck.width = check.width;
+        overlayCheck.height = check.height;
 
 
         // Children
-        if(appButtonArray.length != 0){
-            for(appButtonI in appButtonArray){
-                appButtonI.refresh(core);
+        if(appCheckArray.length != 0){
+            for(appCheckI in appCheckArray){
+                appCheckI.refresh(core);
             }
         }
 
@@ -126,54 +127,54 @@ class Button {
     public function events(core:Core){
 
 
-        button.addEventListener(MouseEvent.MOUSE_DOWN,(e)->{
+        check.addEventListener(MouseEvent.MOUSE_DOWN,(e)->{
 
 
             // Set Position
-            overlayButton.x = 0.2*core.stage.stageWidth/2 - overlayButton.width/2 + 0.8 * core.stage.stageWidth;
-            overlayButton.y = 0.23 * core.stage.stageHeight;
+            overlayCheck.x = 0.2*core.stage.stageWidth/2 - overlayCheck.width/2 + 0.8 * core.stage.stageWidth;
+            overlayCheck.y = 0.53 * core.stage.stageHeight;
 
             // Add overlay 
-            core.editorView.getEditorView().addChild(overlayButton);
+            core.editorView.getEditorView().addChild(overlayCheck);
             // Start drag
-            overlayButton.startDrag();
+            overlayCheck.startDrag();
 
         });
 
 
         // Cand dam click pe MouseEvent 
-        overlayButton.addEventListener(MouseEvent.MOUSE_UP,(e)->{
-            trace(overlayButton.x+ " "+ overlayButton.y);
-            if(overlayButton.x>0.2 * core.stage.stageWidth &&
-               overlayButton.y>0.1 * core.stage.stageHeight &&
-               overlayButton.x<0.8 * core.stage.stageWidth){
+        overlayCheck.addEventListener(MouseEvent.MOUSE_UP,(e)->{
+            trace(overlayCheck.x+ " "+ overlayCheck.y);
+            if(overlayCheck.x>0.2 * core.stage.stageWidth &&
+               overlayCheck.y>0.1 * core.stage.stageHeight &&
+               overlayCheck.x<0.8 * core.stage.stageWidth){
 
 
-                // new AppButton
-                var appButton = new app.editorView.appView.AppButton(core);
-                appButtonArray.push(appButton);
-                appButtonAux = appButton;
+                // new AppCheck
+                var appCheck = new app.editorView.appView.AppCheck(core);
+                appCheckArray.push(appCheck);
+                appCheckAux = appCheck;
 
                 
-                appButton.getAppButton().width = overlayButton.width;
-                appButton.getAppButton().height = overlayButton.height;
+                appCheck.getAppCheck().width = overlayCheck.width;
+                appCheck.getAppCheck().height = overlayCheck.height;
 
-                appButton.getAppButton().x = overlayButton.x - core.editorView.appView.getAppView().x;
-                appButton.getAppButton().y = overlayButton.y - core.editorView.appView.getAppView().y;
+                appCheck.getAppCheck().x = overlayCheck.x - core.editorView.appView.getAppView().x;
+                appCheck.getAppCheck().y = overlayCheck.y - core.editorView.appView.getAppView().y;
 
 
 
-                appButton.setPercents(core);
+                appCheck.setPercents(core);
 
-                core.editorView.appView.getAppView().addChild(appButton.getAppButton());
+                core.editorView.appView.getAppView().addChild(appCheck.getAppCheck());
 
             
 
                 // Stop Drag
-                overlayButton.stopDrag();
+                overlayCheck.stopDrag();
 
                 // Remove Overlay
-                core.editorView.getEditorView().removeChild(overlayButton);
+                core.editorView.getEditorView().removeChild(overlayCheck);
 
 
                 // Here we add the PopUp
@@ -183,10 +184,10 @@ class Button {
             } else {
 
                 // Stop Drag
-                overlayButton.stopDrag();
+                overlayCheck.stopDrag();
 
                 // Remove Overlay
-                core.editorView.getEditorView().removeChild(overlayButton);
+                core.editorView.getEditorView().removeChild(overlayCheck);
 
             }
         });
@@ -213,13 +214,13 @@ class Button {
             var uppercaseComponentName = componentName.substring(0,1).toUpperCase() + componentName.substring(1);
             var lowercaseComponentName = componentName.substring(0,1).toLowerCase() + componentName.substring(1);
 
-            appButtonAux.code.name = componentName;
-            appButtonAux.code.text = "Button";
+            appCheckAux.code.name = componentName;
+            appCheckAux.code.text = "Check";
 
 
 
-            // Create file Button for project
-            File.saveContent(core.addProject.okButton.path + "/Source/app/"+lowercaseScreenName+"/"+uppercaseComponentName+".hx", appButtonAux.code.getCode(core));
+            // Create file Check for project
+            File.saveContent(core.addProject.okButton.path + "/Source/app/"+lowercaseScreenName+"/"+uppercaseComponentName+".hx", appCheckAux.code.getCode(core));
 
             // Refresh radioButton();
             var index = core.editorView.panel.toggleGroup.selectedIndex;

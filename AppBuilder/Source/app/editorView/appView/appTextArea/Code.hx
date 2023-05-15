@@ -1,4 +1,4 @@
-package app.editorView.appView.appButton;
+package app.editorView.appView.appTextArea;
 
 #if sys
 import sys.io.File;
@@ -68,16 +68,16 @@ class Code{
 
         return "package app."+lowercaseScreenName+";
 
-import feathers.controls.Button;
-import feathers.events.TriggerEvent;
+import feathers.controls.TextArea;
+import openfl.events.Event;
 
 class "+ uppercaseName+" {
-    var "+lowercaseName+":Button;
+    var "+lowercaseName+":TextArea;
 
 
     public function new(core:Core){
         // Title
-        "+lowercaseName+"= new Button('"+text+"');
+        "+lowercaseName+"= new TextArea('"+text+"');
         // End Title
 
         refresh(core);
@@ -103,7 +103,7 @@ class "+ uppercaseName+" {
     }
 
     public function events(core:Core){
-        "+lowercaseName+".addEventListener(TriggerEvent.TRIGGER,(e)->{
+        "+lowercaseName+".addEventListener(Event.CHANGE,(e)->{
             // TriggerEvent
 
             // End TriggerEvent

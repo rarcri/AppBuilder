@@ -1,4 +1,4 @@
-package app.editorView.appView.appButton;
+package app.editorView.appView.appTextInput;
 
 #if sys
 import sys.io.File;
@@ -68,16 +68,16 @@ class Code{
 
         return "package app."+lowercaseScreenName+";
 
-import feathers.controls.Button;
-import feathers.events.TriggerEvent;
+import feathers.controls.TextInput;
+import openfl.events.Event;
 
 class "+ uppercaseName+" {
-    var "+lowercaseName+":Button;
+    var "+lowercaseName+":TextInput;
 
 
     public function new(core:Core){
         // Title
-        "+lowercaseName+"= new Button('"+text+"');
+        "+lowercaseName+"= new TextInput('"+text+"');
         // End Title
 
         refresh(core);
@@ -101,10 +101,9 @@ class "+ uppercaseName+" {
         "+lowercaseName+".y = "+yPercent+" * parentHeight;
         // End Refresh
     }
-
     public function events(core:Core){
-        "+lowercaseName+".addEventListener(TriggerEvent.TRIGGER,(e)->{
-            // TriggerEvent
+        "+lowercaseName+".addEventListener(Event.CHANGE,(e)->{
+            // TriggerEvent 
 
             // End TriggerEvent
         });

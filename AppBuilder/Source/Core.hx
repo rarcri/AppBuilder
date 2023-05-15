@@ -1,7 +1,10 @@
-import app.AddProject;
 import haxe.display.Protocol.InitializeParams;
+import app.AddProject;
 import app.InitialScreen;
 import app.EditorView;
+import app.EventView;
+import app.SettingsView;
+import app.TitleView;
 import openfl.display.Stage;
 import openfl.display.Sprite;
 
@@ -15,6 +18,9 @@ class Core {
     public var initialScreen:InitialScreen;
     public var addProject:AddProject;
     public var editorView:EditorView;
+    public var eventView:EventView;
+    public var settingsView:SettingsView;
+    public var titleView:TitleView;
 
 
     public function new(stage){
@@ -26,6 +32,9 @@ class Core {
         initialScreen = new InitialScreen(this);
         addProject = new AddProject(this);
         editorView = new EditorView(this);
+        eventView = new EventView(this);
+        settingsView = new SettingsView(this);
+        titleView = new TitleView(this);
 
         // Add
         core.addChild(initialScreen.getInitialScreen());
@@ -40,5 +49,8 @@ class Core {
         initialScreen.refresh(this);
         addProject.refresh(this);
         editorView.refresh(this);
+        eventView.refresh(this);
+        settingsView.refresh(this);
+        titleView.refresh(this);
     }
 }

@@ -85,7 +85,7 @@ class Panel{
                 regex = ~/(?<=var Children)\n/mg;
 
                 coreCode = regex.replace(coreCode,"
-        var "+lowercaseScreenName+":"+uppercaseScreenName+";
+        public var "+lowercaseScreenName+":"+uppercaseScreenName+";
     ");
 
                 // create Children
@@ -96,11 +96,11 @@ class Panel{
     ");
 
                 // add Children
-                regex = ~/(?<=add Children)\n/mg;
+    //             regex = ~/(?<=add Children)\n/mg;
 
-                coreCode = regex.replace(coreCode,"
-            core.addChild("+lowercaseScreenName+".get"+uppercaseScreenName+"());
-    ");
+    //             coreCode = regex.replace(coreCode,"
+    //         core.addChild("+lowercaseScreenName+".get"+uppercaseScreenName+"());
+    // ");
 
                 regex = ~/(?<=refreshButton)\n/mg;
 
@@ -119,37 +119,37 @@ class Panel{
                 lowercaseScreenName = screenName.substring(0,1).toLowerCase() + screenName.substring(1);
 
 
-                // Content for screen1
+                // Content for screens >1
                 var screenContent = "package app;
-    import openfl.display.Stage;
-    import openfl.display.Sprite;
+import openfl.display.Stage;
+import openfl.display.Sprite;
 
-    class "+uppercaseScreenName+" {
-        var "+lowercaseScreenName+":Sprite;
-        // var Children
+class "+uppercaseScreenName+" {
+    var "+lowercaseScreenName+":Sprite;
+    // var Children
 
-        public function new(core:Core){
+    public function new(core:Core){
 
-            "+lowercaseScreenName+" = new Sprite();
+        "+lowercaseScreenName+" = new Sprite();
 
-            // create Children
+        // create Children
 
-            // add Children
+        // add Children
 
 
-            refresh(core);
-        }
+        refresh(core);
+    }
 
-        public function get"+uppercaseScreenName+"(){
-            return "+lowercaseScreenName+";
-        }
+    public function get"+uppercaseScreenName+"(){
+        return "+lowercaseScreenName+";
+    }
 
-        public function refresh(core:Core){
-            // refreshButton
+    public function refresh(core:Core){
+        // refreshChildren
 
-        }
+    }
 
-    }";
+}";
 
                 // Save the Screen1 content 
                 File.saveContent(core.addProject.okButton.path +"/Source/app/"+uppercaseScreenName+".hx",screenContent);

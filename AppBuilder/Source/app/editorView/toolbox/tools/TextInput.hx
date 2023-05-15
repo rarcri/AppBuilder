@@ -1,13 +1,13 @@
 package app.editorView.toolbox.tools;
 
-import app.editorView.appView.AppButton;
+import app.editorView.appView.AppTextInput;
 import openfl.geom.Point;
 import openfl.events.Event;
 import openfl.events.MouseEvent;
 import feathers.events.TriggerEvent;
 import openfl.events.KeyboardEvent;
 import openfl.events.FocusEvent;
-import feathers.controls.Button;
+import feathers.controls.Label;
 import feathers.controls.Panel;
 import feathers.controls.Header;
 import feathers.controls.Label;
@@ -18,44 +18,45 @@ import openfl.text.TextFormat;
 import sys.io.File;
 #end
 
-class Button {
+class TextInput {
 
-    var button:feathers.controls.Button;
+    var textInput:feathers.controls.TextInput;
     // Overlay
-    var overlayButton:feathers.controls.Button;
-    // Button Aux
-    public var appButtonAux:AppButton;
+    var overlayTextInput:feathers.controls.TextInput;
+    // Label Aux
+    public var appTextInputAux:AppTextInput;
+
     //PopUp
     var panel:Panel;
-    var label:Label;
-    var textInput:TextInput;
+    var label1:feathers.controls.Label;
+    var textInput1:feathers.controls.TextInput;
     var btn:feathers.controls.Button;
-    // AppButton
-    public var appButtonArray:Array<AppButton>;
+    // AppLabel
+    public var appTextInputArray:Array<AppTextInput>;
 
 
     public function new(core:Core){
-        button = new feathers.controls.Button("Button");
+        textInput = new feathers.controls.TextInput("Text Input");
 
-        // OverlayButton
-        overlayButton = new feathers.controls.Button("Button");
+        // OverlayLabel
+        overlayTextInput = new feathers.controls.TextInput();
 
         // Popup
         panel = new Panel();
         panel.header = new Header("Numele Componentei");
         
-        label = new Label("Introduceți numele:");
-        panel.addChild(label);
+        label1 = new feathers.controls.Label("Introduceți numele:");
+        panel.addChild(label1);
 
-        textInput = new TextInput();
-        textInput.restrict = "a-zA-Z0-9_";
-        panel.addChild(textInput);
+        textInput1 = new feathers.controls.TextInput();
+        textInput1.restrict = "a-zA-Z0-9_";
+        panel.addChild(textInput1);
 
         btn = new feathers.controls.Button("OK");
         panel.addChild(btn);
 
-        // AppButtonArray
-        appButtonArray = new Array();
+        // AppTextInputArray
+        appTextInputArray = new Array();
         
 
         refresh(core);
@@ -63,8 +64,8 @@ class Button {
     }
 
 
-    public function getButton(){
-        return button;
+    public function getTextInput(){
+        return textInput;
     }
 
 
@@ -73,28 +74,28 @@ class Button {
 
         
 
-        button.width = 0.1 * core.stage.stageWidth;
-        button.height = 0.05 * core.stage.stageHeight;
+        textInput.width = 0.1 * core.stage.stageWidth;
+        textInput.height = 0.05 * core.stage.stageHeight;
 
-        button.x = 0.2 * core.stage.stageWidth/2 - button.width/2;
-        button.y = 0.13 * core.stage.stageHeight;
+        textInput.x = 0.2 * core.stage.stageWidth/2 - textInput.width/2;
+        textInput.y = 0.33 * core.stage.stageHeight;
 
-        // Set Button textFormat
+        // Set Label textFormat
         if(core.stage.stageWidth < core.stage.stageHeight){
-		    button.textFormat = new TextFormat("Arial", Std.int(0.03 * core.stage.stageWidth));
+		    textInput.textFormat = new TextFormat("Arial", Std.int(0.03 * core.stage.stageWidth));
         } else {
-		    button.textFormat = new TextFormat("Arial", Std.int(0.03 * core.stage.stageHeight));
+		    textInput.textFormat = new TextFormat("Arial", Std.int(0.03 * core.stage.stageHeight));
         }
         
-        // OverlayButton
-        overlayButton.width = button.width;
-        overlayButton.height = button.height;
+        // OverlayLabel
+        overlayTextInput.width = textInput.width;
+        overlayTextInput.height = textInput.height;
 
 
         // Children
-        if(appButtonArray.length != 0){
-            for(appButtonI in appButtonArray){
-                appButtonI.refresh(core);
+        if(appTextInputArray.length != 0){
+            for(appTextInputI in appTextInputArray){
+                appTextInputI.refresh(core);
             }
         }
 
@@ -103,17 +104,17 @@ class Button {
         panel.width = 0.5 * core.stage.stageWidth;
         panel.height = 0.4 * core.stage.stageHeight;
 
-        label.width = 0.4 * panel.width;
-        label.height = 0.1 * panel.height;
+        label1.width = 0.4 * panel.width;
+        label1.height = 0.1 * panel.height;
 
-        label.x = panel.width / 2 - label.width/2;
-        label.y = 0.1 * panel.height;
+        label1.x = panel.width / 2 - label1.width/2;
+        label1.y = 0.1 * panel.height;
 
-        textInput.width = 0.4 * panel.width;
-        textInput.height = 0.1 * panel.height;
+        textInput1.width = 0.4 * panel.width;
+        textInput1.height = 0.1 * panel.height;
 
-        textInput.x = panel.width / 2 - textInput.width/2;
-        textInput.y = 0.2 * panel.height;
+        textInput1.x = panel.width / 2 - textInput1.width/2;
+        textInput1.y = 0.2 * panel.height;
         
         btn.width = 0.4 * panel.width;
         btn.height = 0.1 * panel.height;
@@ -126,55 +127,52 @@ class Button {
     public function events(core:Core){
 
 
-        button.addEventListener(MouseEvent.MOUSE_DOWN,(e)->{
+        textInput.addEventListener(MouseEvent.MOUSE_DOWN,(e)->{
 
 
             // Set Position
-            overlayButton.x = 0.2*core.stage.stageWidth/2 - overlayButton.width/2 + 0.8 * core.stage.stageWidth;
-            overlayButton.y = 0.23 * core.stage.stageHeight;
+            overlayTextInput.x = 0.2*core.stage.stageWidth/2 - overlayTextInput.width/2 + 0.8 * core.stage.stageWidth;
+            overlayTextInput.y = 0.43 * core.stage.stageHeight;
 
             // Add overlay 
-            core.editorView.getEditorView().addChild(overlayButton);
+            core.editorView.getEditorView().addChild(overlayTextInput);
             // Start drag
-            overlayButton.startDrag();
+            overlayTextInput.startDrag();
 
         });
 
 
         // Cand dam click pe MouseEvent 
-        overlayButton.addEventListener(MouseEvent.MOUSE_UP,(e)->{
-            trace(overlayButton.x+ " "+ overlayButton.y);
-            if(overlayButton.x>0.2 * core.stage.stageWidth &&
-               overlayButton.y>0.1 * core.stage.stageHeight &&
-               overlayButton.x<0.8 * core.stage.stageWidth){
-
-
-                // new AppButton
-                var appButton = new app.editorView.appView.AppButton(core);
-                appButtonArray.push(appButton);
-                appButtonAux = appButton;
+        overlayTextInput.addEventListener(MouseEvent.MOUSE_UP,(e)->{
+            trace(overlayTextInput.x+ " "+ overlayTextInput.y);
+            if(overlayTextInput.x>0.2 * core.stage.stageWidth &&
+               overlayTextInput.y>0.1 * core.stage.stageHeight &&
+               overlayTextInput.x<0.8 * core.stage.stageWidth){
+                // new AppLabel
+                var appTextInput = new app.editorView.appView.AppTextInput(core);
+                appTextInputArray.push(appTextInput);
+                appTextInputAux= appTextInput;
 
                 
-                appButton.getAppButton().width = overlayButton.width;
-                appButton.getAppButton().height = overlayButton.height;
+                appTextInput.getAppTextInput().width = overlayTextInput.width;
+                appTextInput.getAppTextInput().height = overlayTextInput.height;
 
-                appButton.getAppButton().x = overlayButton.x - core.editorView.appView.getAppView().x;
-                appButton.getAppButton().y = overlayButton.y - core.editorView.appView.getAppView().y;
+                appTextInput.getAppTextInput().x = overlayTextInput.x - core.editorView.appView.getAppView().x;
+                appTextInput.getAppTextInput().y = overlayTextInput.y - core.editorView.appView.getAppView().y;
 
 
 
-                appButton.setPercents(core);
+                appTextInput.setPercents(core);
 
-                core.editorView.appView.getAppView().addChild(appButton.getAppButton());
+                core.editorView.appView.getAppView().addChild(appTextInput.getAppTextInput());
 
             
 
                 // Stop Drag
-                overlayButton.stopDrag();
+                overlayTextInput.stopDrag();
 
                 // Remove Overlay
-                core.editorView.getEditorView().removeChild(overlayButton);
-
+                core.editorView.getEditorView().removeChild(overlayTextInput);
 
                 // Here we add the PopUp
                 PopUpManager.addPopUp(panel, core.stage, true, true);
@@ -183,16 +181,20 @@ class Button {
             } else {
 
                 // Stop Drag
-                overlayButton.stopDrag();
+                overlayTextInput.stopDrag();
 
                 // Remove Overlay
-                core.editorView.getEditorView().removeChild(overlayButton);
+                core.editorView.getEditorView().removeChild(overlayTextInput);
 
             }
         });
 
         // Add Event Listener to popup
         btn.addEventListener(TriggerEvent.TRIGGER,(e)->{
+
+            // Refresh Buttons
+            var index = core.editorView.panel.toggleGroup.selectedIndex;
+            core.editorView.panel.screens[index].radioButton.dispatchEvent(new Event("CHANGE"));
 
             // ScreenName
             var screenIndex = core.editorView.panel.toggleGroup.selectedIndex;
@@ -206,20 +208,20 @@ class Button {
 
 
             // Name of the component
-            var componentName = textInput.text;
+            var componentName = textInput1.text;
 
 
             // upper and lowercase Name for Component
             var uppercaseComponentName = componentName.substring(0,1).toUpperCase() + componentName.substring(1);
             var lowercaseComponentName = componentName.substring(0,1).toLowerCase() + componentName.substring(1);
 
-            appButtonAux.code.name = componentName;
-            appButtonAux.code.text = "Button";
+            appTextInputAux.code.name = componentName;
+            appTextInputAux.code.text = "Label";
 
 
 
-            // Create file Button for project
-            File.saveContent(core.addProject.okButton.path + "/Source/app/"+lowercaseScreenName+"/"+uppercaseComponentName+".hx", appButtonAux.code.getCode(core));
+            // Create file Label for project
+            File.saveContent(core.addProject.okButton.path + "/Source/app/"+lowercaseScreenName+"/"+uppercaseComponentName+".hx", appTextInputAux.code.getCode(core));
 
             // Refresh radioButton();
             var index = core.editorView.panel.toggleGroup.selectedIndex;

@@ -1,4 +1,4 @@
-package app.editorView.appView.appButton;
+package app.editorView.appView.appLabel;
 
 #if sys
 import sys.io.File;
@@ -68,16 +68,16 @@ class Code{
 
         return "package app."+lowercaseScreenName+";
 
-import feathers.controls.Button;
-import feathers.events.TriggerEvent;
+import feathers.controls.Label;
+import openfl.events.MouseEvent;
 
 class "+ uppercaseName+" {
-    var "+lowercaseName+":Button;
+    var "+lowercaseName+":Label;
 
 
     public function new(core:Core){
         // Title
-        "+lowercaseName+"= new Button('"+text+"');
+        "+lowercaseName+"= new Label('"+text+"');
         // End Title
 
         refresh(core);
@@ -103,8 +103,8 @@ class "+ uppercaseName+" {
     }
 
     public function events(core:Core){
-        "+lowercaseName+".addEventListener(TriggerEvent.TRIGGER,(e)->{
-            // TriggerEvent
+        "+lowercaseName+".addEventListener(MouseEvent.CLICK,(e)->{
+            // TriggerEvent 
 
             // End TriggerEvent
         });

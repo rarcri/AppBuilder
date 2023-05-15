@@ -1,6 +1,6 @@
 package app.editorView.toolbox.tools;
 
-import app.editorView.appView.AppButton;
+import app.editorView.appView.AppTextArea;
 import openfl.geom.Point;
 import openfl.events.Event;
 import openfl.events.MouseEvent;
@@ -8,6 +8,7 @@ import feathers.events.TriggerEvent;
 import openfl.events.KeyboardEvent;
 import openfl.events.FocusEvent;
 import feathers.controls.Button;
+import feathers.controls.TextArea;
 import feathers.controls.Panel;
 import feathers.controls.Header;
 import feathers.controls.Label;
@@ -18,27 +19,27 @@ import openfl.text.TextFormat;
 import sys.io.File;
 #end
 
-class Button {
+class TextArea{
 
-    var button:feathers.controls.Button;
+    var textArea:feathers.controls.TextArea;
     // Overlay
-    var overlayButton:feathers.controls.Button;
+    var overlayTextArea:feathers.controls.TextArea;
     // Button Aux
-    public var appButtonAux:AppButton;
+    public var appTextAreaAux:AppTextArea;
     //PopUp
     var panel:Panel;
     var label:Label;
     var textInput:TextInput;
     var btn:feathers.controls.Button;
     // AppButton
-    public var appButtonArray:Array<AppButton>;
+    public var appTextAreaArray:Array<AppTextArea>;
 
 
     public function new(core:Core){
-        button = new feathers.controls.Button("Button");
+        textArea = new feathers.controls.TextArea("TextArea");
 
-        // OverlayButton
-        overlayButton = new feathers.controls.Button("Button");
+        // OverlayTextArea
+        overlayTextArea = new feathers.controls.TextArea("TextArea");
 
         // Popup
         panel = new Panel();
@@ -54,8 +55,8 @@ class Button {
         btn = new feathers.controls.Button("OK");
         panel.addChild(btn);
 
-        // AppButtonArray
-        appButtonArray = new Array();
+        // AppTextAreaArray
+        appTextAreaArray = new Array();
         
 
         refresh(core);
@@ -63,8 +64,8 @@ class Button {
     }
 
 
-    public function getButton(){
-        return button;
+    public function getTextArea(){
+        return textArea;
     }
 
 
@@ -73,28 +74,28 @@ class Button {
 
         
 
-        button.width = 0.1 * core.stage.stageWidth;
-        button.height = 0.05 * core.stage.stageHeight;
+        textArea.width = 0.18 * core.stage.stageWidth;
+        textArea.height = 0.1 * core.stage.stageHeight;
 
-        button.x = 0.2 * core.stage.stageWidth/2 - button.width/2;
-        button.y = 0.13 * core.stage.stageHeight;
+        textArea.x = 0.2 * core.stage.stageWidth/2 - textArea.width/2;
+        textArea.y = 0.53 * core.stage.stageHeight;
 
-        // Set Button textFormat
+        // Set textArea textFormat
         if(core.stage.stageWidth < core.stage.stageHeight){
-		    button.textFormat = new TextFormat("Arial", Std.int(0.03 * core.stage.stageWidth));
+		    textArea.textFormat = new TextFormat("Arial", Std.int(0.02 * core.stage.stageWidth));
         } else {
-		    button.textFormat = new TextFormat("Arial", Std.int(0.03 * core.stage.stageHeight));
+		    textArea.textFormat = new TextFormat("Arial", Std.int(0.02 * core.stage.stageHeight));
         }
         
-        // OverlayButton
-        overlayButton.width = button.width;
-        overlayButton.height = button.height;
+        // OverlaytextArea
+        overlayTextArea.width = textArea.width;
+        overlayTextArea.height = textArea.height;
 
 
         // Children
-        if(appButtonArray.length != 0){
-            for(appButtonI in appButtonArray){
-                appButtonI.refresh(core);
+        if(appTextAreaArray.length != 0){
+            for(appTextAreaI in appTextAreaArray){
+                appTextAreaI.refresh(core);
             }
         }
 
@@ -126,54 +127,54 @@ class Button {
     public function events(core:Core){
 
 
-        button.addEventListener(MouseEvent.MOUSE_DOWN,(e)->{
+        textArea.addEventListener(MouseEvent.MOUSE_DOWN,(e)->{
 
 
             // Set Position
-            overlayButton.x = 0.2*core.stage.stageWidth/2 - overlayButton.width/2 + 0.8 * core.stage.stageWidth;
-            overlayButton.y = 0.23 * core.stage.stageHeight;
+            overlayTextArea.x = 0.2*core.stage.stageWidth/2 - overlayTextArea.width/2 + 0.8 * core.stage.stageWidth;
+            overlayTextArea.y = 0.63 * core.stage.stageHeight;
 
             // Add overlay 
-            core.editorView.getEditorView().addChild(overlayButton);
+            core.editorView.getEditorView().addChild(overlayTextArea);
             // Start drag
-            overlayButton.startDrag();
+            overlayTextArea.startDrag();
 
         });
 
 
         // Cand dam click pe MouseEvent 
-        overlayButton.addEventListener(MouseEvent.MOUSE_UP,(e)->{
-            trace(overlayButton.x+ " "+ overlayButton.y);
-            if(overlayButton.x>0.2 * core.stage.stageWidth &&
-               overlayButton.y>0.1 * core.stage.stageHeight &&
-               overlayButton.x<0.8 * core.stage.stageWidth){
+        overlayTextArea.addEventListener(MouseEvent.MOUSE_UP,(e)->{
+            trace(overlayTextArea.x+ " "+ overlayTextArea.y);
+            if(overlayTextArea.x>0.2 * core.stage.stageWidth &&
+               overlayTextArea.y>0.1 * core.stage.stageHeight &&
+               overlayTextArea.x<0.8 * core.stage.stageWidth){
 
 
-                // new AppButton
-                var appButton = new app.editorView.appView.AppButton(core);
-                appButtonArray.push(appButton);
-                appButtonAux = appButton;
+                // new AppTextArea
+                var appTextArea = new app.editorView.appView.AppTextArea(core);
+                appTextAreaArray.push(appTextArea);
+                appTextAreaAux = appTextArea;
 
                 
-                appButton.getAppButton().width = overlayButton.width;
-                appButton.getAppButton().height = overlayButton.height;
+                appTextArea.getAppTextArea().width = overlayTextArea.width;
+                appTextArea.getAppTextArea().height = overlayTextArea.height;
 
-                appButton.getAppButton().x = overlayButton.x - core.editorView.appView.getAppView().x;
-                appButton.getAppButton().y = overlayButton.y - core.editorView.appView.getAppView().y;
+                appTextArea.getAppTextArea().x = overlayTextArea.x - core.editorView.appView.getAppView().x;
+                appTextArea.getAppTextArea().y = overlayTextArea.y - core.editorView.appView.getAppView().y;
 
 
 
-                appButton.setPercents(core);
+                appTextArea.setPercents(core);
 
-                core.editorView.appView.getAppView().addChild(appButton.getAppButton());
+                core.editorView.appView.getAppView().addChild(appTextArea.getAppTextArea());
 
             
 
                 // Stop Drag
-                overlayButton.stopDrag();
+                overlayTextArea.stopDrag();
 
                 // Remove Overlay
-                core.editorView.getEditorView().removeChild(overlayButton);
+                core.editorView.getEditorView().removeChild(overlayTextArea);
 
 
                 // Here we add the PopUp
@@ -183,10 +184,10 @@ class Button {
             } else {
 
                 // Stop Drag
-                overlayButton.stopDrag();
+                overlayTextArea.stopDrag();
 
                 // Remove Overlay
-                core.editorView.getEditorView().removeChild(overlayButton);
+                core.editorView.getEditorView().removeChild(overlayTextArea);
 
             }
         });
@@ -213,13 +214,13 @@ class Button {
             var uppercaseComponentName = componentName.substring(0,1).toUpperCase() + componentName.substring(1);
             var lowercaseComponentName = componentName.substring(0,1).toLowerCase() + componentName.substring(1);
 
-            appButtonAux.code.name = componentName;
-            appButtonAux.code.text = "Button";
+            appTextAreaAux.code.name = componentName;
+            appTextAreaAux.code.text = "TextArea";
 
 
 
-            // Create file Button for project
-            File.saveContent(core.addProject.okButton.path + "/Source/app/"+lowercaseScreenName+"/"+uppercaseComponentName+".hx", appButtonAux.code.getCode(core));
+            // Create file TextArea for project
+            File.saveContent(core.addProject.okButton.path + "/Source/app/"+lowercaseScreenName+"/"+uppercaseComponentName+".hx", appTextAreaAux.code.getCode(core));
 
             // Refresh radioButton();
             var index = core.editorView.panel.toggleGroup.selectedIndex;

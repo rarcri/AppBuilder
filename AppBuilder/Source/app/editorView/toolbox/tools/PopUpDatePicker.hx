@@ -1,6 +1,6 @@
 package app.editorView.toolbox.tools;
 
-import app.editorView.appView.AppButton;
+import app.editorView.appView.AppPopUpDatePicker;
 import openfl.geom.Point;
 import openfl.events.Event;
 import openfl.events.MouseEvent;
@@ -8,6 +8,7 @@ import feathers.events.TriggerEvent;
 import openfl.events.KeyboardEvent;
 import openfl.events.FocusEvent;
 import feathers.controls.Button;
+import feathers.controls.PopUpDatePicker;
 import feathers.controls.Panel;
 import feathers.controls.Header;
 import feathers.controls.Label;
@@ -18,27 +19,27 @@ import openfl.text.TextFormat;
 import sys.io.File;
 #end
 
-class Button {
+class PopUpDatePicker{
 
-    var button:feathers.controls.Button;
+    var popUpDatePicker:feathers.controls.PopUpDatePicker;
     // Overlay
-    var overlayButton:feathers.controls.Button;
+    var overlayPopUpDatePicker:feathers.controls.PopUpDatePicker;
     // Button Aux
-    public var appButtonAux:AppButton;
+    public var appPopUpDatePickerAux:AppPopUpDatePicker;
     //PopUp
     var panel:Panel;
     var label:Label;
     var textInput:TextInput;
     var btn:feathers.controls.Button;
     // AppButton
-    public var appButtonArray:Array<AppButton>;
+    public var appPopUpDatePickerArray:Array<AppPopUpDatePicker>;
 
 
     public function new(core:Core){
-        button = new feathers.controls.Button("Button");
+        popUpDatePicker = new feathers.controls.PopUpDatePicker();
 
-        // OverlayButton
-        overlayButton = new feathers.controls.Button("Button");
+        // OverlayPopUpDatePicker
+        overlayPopUpDatePicker = new feathers.controls.PopUpDatePicker();
 
         // Popup
         panel = new Panel();
@@ -54,8 +55,8 @@ class Button {
         btn = new feathers.controls.Button("OK");
         panel.addChild(btn);
 
-        // AppButtonArray
-        appButtonArray = new Array();
+        // AppPopUpDatePickerArray
+        appPopUpDatePickerArray = new Array();
         
 
         refresh(core);
@@ -63,8 +64,8 @@ class Button {
     }
 
 
-    public function getButton(){
-        return button;
+    public function getPopUpDatePicker(){
+        return popUpDatePicker;
     }
 
 
@@ -73,28 +74,22 @@ class Button {
 
         
 
-        button.width = 0.1 * core.stage.stageWidth;
-        button.height = 0.05 * core.stage.stageHeight;
+        popUpDatePicker.width = 0.1 * core.stage.stageWidth;
+        popUpDatePicker.height = 0.05 * core.stage.stageHeight;
 
-        button.x = 0.2 * core.stage.stageWidth/2 - button.width/2;
-        button.y = 0.13 * core.stage.stageHeight;
+        popUpDatePicker.x = 0.2 * core.stage.stageWidth/2 - popUpDatePicker.width/2;
+        popUpDatePicker.y = 0.8 * core.stage.stageHeight;
 
-        // Set Button textFormat
-        if(core.stage.stageWidth < core.stage.stageHeight){
-		    button.textFormat = new TextFormat("Arial", Std.int(0.03 * core.stage.stageWidth));
-        } else {
-		    button.textFormat = new TextFormat("Arial", Std.int(0.03 * core.stage.stageHeight));
-        }
         
-        // OverlayButton
-        overlayButton.width = button.width;
-        overlayButton.height = button.height;
+        // OverlaypopUpDatePicker
+        overlayPopUpDatePicker.width = popUpDatePicker.width;
+        overlayPopUpDatePicker.height = popUpDatePicker.height;
 
 
         // Children
-        if(appButtonArray.length != 0){
-            for(appButtonI in appButtonArray){
-                appButtonI.refresh(core);
+        if(appPopUpDatePickerArray.length != 0){
+            for(appPopUpDatePickerI in appPopUpDatePickerArray){
+                appPopUpDatePickerI.refresh(core);
             }
         }
 
@@ -126,54 +121,54 @@ class Button {
     public function events(core:Core){
 
 
-        button.addEventListener(MouseEvent.MOUSE_DOWN,(e)->{
+        popUpDatePicker.addEventListener(MouseEvent.MOUSE_DOWN,(e)->{
 
 
             // Set Position
-            overlayButton.x = 0.2*core.stage.stageWidth/2 - overlayButton.width/2 + 0.8 * core.stage.stageWidth;
-            overlayButton.y = 0.23 * core.stage.stageHeight;
+            overlayPopUpDatePicker.x = 0.2*core.stage.stageWidth/2 - overlayPopUpDatePicker.width/2 + 0.8 * core.stage.stageWidth;
+            overlayPopUpDatePicker.y = 0.90 * core.stage.stageHeight;
 
             // Add overlay 
-            core.editorView.getEditorView().addChild(overlayButton);
+            core.editorView.getEditorView().addChild(overlayPopUpDatePicker);
             // Start drag
-            overlayButton.startDrag();
+            overlayPopUpDatePicker.startDrag();
 
         });
 
 
         // Cand dam click pe MouseEvent 
-        overlayButton.addEventListener(MouseEvent.MOUSE_UP,(e)->{
-            trace(overlayButton.x+ " "+ overlayButton.y);
-            if(overlayButton.x>0.2 * core.stage.stageWidth &&
-               overlayButton.y>0.1 * core.stage.stageHeight &&
-               overlayButton.x<0.8 * core.stage.stageWidth){
+        overlayPopUpDatePicker.addEventListener(MouseEvent.MOUSE_UP,(e)->{
+            trace(overlayPopUpDatePicker.x+ " "+ overlayPopUpDatePicker.y);
+            if(overlayPopUpDatePicker.x>0.2 * core.stage.stageWidth &&
+               overlayPopUpDatePicker.y>0.1 * core.stage.stageHeight &&
+               overlayPopUpDatePicker.x<0.8 * core.stage.stageWidth){
 
 
-                // new AppButton
-                var appButton = new app.editorView.appView.AppButton(core);
-                appButtonArray.push(appButton);
-                appButtonAux = appButton;
+                // new AppPopUpDatePicker
+                var appPopUpDatePicker = new app.editorView.appView.AppPopUpDatePicker(core);
+                appPopUpDatePickerArray.push(appPopUpDatePicker);
+                appPopUpDatePickerAux = appPopUpDatePicker;
 
                 
-                appButton.getAppButton().width = overlayButton.width;
-                appButton.getAppButton().height = overlayButton.height;
+                appPopUpDatePicker.getAppPopUpDatePicker().width = overlayPopUpDatePicker.width;
+                appPopUpDatePicker.getAppPopUpDatePicker().height = overlayPopUpDatePicker.height;
 
-                appButton.getAppButton().x = overlayButton.x - core.editorView.appView.getAppView().x;
-                appButton.getAppButton().y = overlayButton.y - core.editorView.appView.getAppView().y;
+                appPopUpDatePicker.getAppPopUpDatePicker().x = overlayPopUpDatePicker.x - core.editorView.appView.getAppView().x;
+                appPopUpDatePicker.getAppPopUpDatePicker().y = overlayPopUpDatePicker.y - core.editorView.appView.getAppView().y;
 
 
 
-                appButton.setPercents(core);
+                appPopUpDatePicker.setPercents(core);
 
-                core.editorView.appView.getAppView().addChild(appButton.getAppButton());
+                core.editorView.appView.getAppView().addChild(appPopUpDatePicker.getAppPopUpDatePicker());
 
             
 
                 // Stop Drag
-                overlayButton.stopDrag();
+                overlayPopUpDatePicker.stopDrag();
 
                 // Remove Overlay
-                core.editorView.getEditorView().removeChild(overlayButton);
+                core.editorView.getEditorView().removeChild(overlayPopUpDatePicker);
 
 
                 // Here we add the PopUp
@@ -183,10 +178,10 @@ class Button {
             } else {
 
                 // Stop Drag
-                overlayButton.stopDrag();
+                overlayPopUpDatePicker.stopDrag();
 
                 // Remove Overlay
-                core.editorView.getEditorView().removeChild(overlayButton);
+                core.editorView.getEditorView().removeChild(overlayPopUpDatePicker);
 
             }
         });
@@ -213,13 +208,13 @@ class Button {
             var uppercaseComponentName = componentName.substring(0,1).toUpperCase() + componentName.substring(1);
             var lowercaseComponentName = componentName.substring(0,1).toLowerCase() + componentName.substring(1);
 
-            appButtonAux.code.name = componentName;
-            appButtonAux.code.text = "Button";
+            appPopUpDatePickerAux.code.name = componentName;
+            appPopUpDatePickerAux.code.text = "PopUpDatePicker";
 
 
 
-            // Create file Button for project
-            File.saveContent(core.addProject.okButton.path + "/Source/app/"+lowercaseScreenName+"/"+uppercaseComponentName+".hx", appButtonAux.code.getCode(core));
+            // Create file PopUpDatePicker for project
+            File.saveContent(core.addProject.okButton.path + "/Source/app/"+lowercaseScreenName+"/"+uppercaseComponentName+".hx", appPopUpDatePickerAux.code.getCode(core));
 
             // Refresh radioButton();
             var index = core.editorView.panel.toggleGroup.selectedIndex;
